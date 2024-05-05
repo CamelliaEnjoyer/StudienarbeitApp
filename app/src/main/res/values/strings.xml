@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">StudienarbeitApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_patient_information">Patient Information</string>
+    <string name="menu_deployment_time">Times</string>
+    <string name="menu_deployment_information">Deployment Information</string>
+    <string name="patientinfo_textPrimaryNameDesc">First name:</string>
+    <string name="patientinfo_textSecondNameDesc">Last name:</string>
+    <string name="patientinfo_textStreetDesc">Street, house number:</string>
+    <string name="patientinfo_textLocDesc">Postal code, city:</string>
+    <string name="patientinfo_textBirthdateDesc">Date of birth:</string>
+    <string name="patientinfo_textSexDesc">Gender:</string>
+    <string name="depltime_textAlertEntryDesc">Alarm received:</string>
+    <string name="depltime_textStartDesc">Deplyoment start:</string>
+    <string name="depltime_textArrivalDesc">Arrival on site:</string>
+    <string name="depltime_textPatientSecuredDesc">Patient admitted:</string>
+    <string name="depltime_textArrival2Desc">Arrival at destination:</string>
+    <string name="depltime_textEndDesc">End of deployment:</string>
+    <string name="depltime_buttonEndDeployment">Complete deployment</string>
+    <string name="deplinfo_textDeplKeywordDesc">Deployment keyword:</string>
+    <string name="deplinfo_textDeplLocDesc">Deployment Location:</string>
+    <string name="deplinfo_textCallerDesc">Caller:</string>
+    <string name="deplinfo_textDeplLoc2Desc">Deplyoment secondary destination:</string>
+    <string name="deplinfo_textDeplAdditionalInfoDesc">Additional information:</string>
+    <string name="deplinfo_buttonHospital">Select hospital</string>
+</resources>
