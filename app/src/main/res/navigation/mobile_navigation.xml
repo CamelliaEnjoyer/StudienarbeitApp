@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_patientInformation">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_patientInformation"
         android:name="com.example.studienarbeitapp.ui.patientInformation.PatientInformationFragment"
-        android:label="@string/menu_home"
+        android:label="@string/menu_patient_information"
         tools:layout="@layout/fragment_patientinformation" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_deploymentInformation"
         android:name="com.example.studienarbeitapp.ui.deploymentInformation.DeploymentInformationFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_deployment_information"
         tools:layout="@layout/fragment_deploynentinformation" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_deploymentTime"
         android:name="com.example.studienarbeitapp.ui.deploymentTime.DeploymentTimeFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_deployment_time"
         tools:layout="@layout/fragment_deploymenttime" />
 </navigation>
