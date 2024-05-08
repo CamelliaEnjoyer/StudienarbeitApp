@@ -23,12 +23,11 @@ class DeploymentTimeViewModel(private val deploymentTimeService: DeploymentTimeS
                     // Update LiveData with the fetched user data
                     deploymentTime.value = deploymentTimeResponse
                 },
-                onError = {emptyTimeResponse ->
+                onError = { emptyTimeResponse ->
                     // Set empty response as value
                     deploymentTime.value = emptyTimeResponse
                 }
             )
-
         }
     }
 
