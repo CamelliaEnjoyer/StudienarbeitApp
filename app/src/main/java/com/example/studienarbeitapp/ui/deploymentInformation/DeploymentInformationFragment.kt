@@ -29,7 +29,7 @@ class DeploymentInformationFragment : Fragment() {
         val deplyomentInformationService = DeplyomentInformationService(requireContext())
         val factory = DeploymentInformationViewModelFactory(deplyomentInformationService)
         val deploymentInformationViewModel =
-            ViewModelProvider(this, factory).get(DeploymentInformationViewModel::class.java)
+            ViewModelProvider(this, factory)[DeploymentInformationViewModel::class.java]
 
         _binding = FragmentDeploynentinformationBinding.inflate(inflater, container, false)
         val root: View = binding.root

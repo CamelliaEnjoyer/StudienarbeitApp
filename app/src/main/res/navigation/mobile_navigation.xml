@@ -23,8 +23,8 @@
         android:label="@string/menu_deployment_time"
         tools:layout="@layout/fragment_deploymenttime" />
     <fragment
-        android:id="@+id/loginFragment2"
-        android:name="com.example.studienarbeitapp.LoginFragment"
+        android:id="@+id/loginFragment"
+        android:name="com.example.studienarbeitapp.ui.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
 </navigation>

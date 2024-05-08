@@ -27,7 +27,7 @@ class PatientInformationFragment : Fragment() {
         val patientInformationService = PatientInformationService(requireContext())
         val factory = PatientInformationViewModelFactory(patientInformationService)
         val patientInformationViewModel =
-            ViewModelProvider(this, factory).get(PatientInformationViewModel::class.java)
+            ViewModelProvider(this, factory)[PatientInformationViewModel::class.java]
 
         _binding = FragmentPatientinformationBinding.inflate(inflater, container, false)
         val root: View = binding.root

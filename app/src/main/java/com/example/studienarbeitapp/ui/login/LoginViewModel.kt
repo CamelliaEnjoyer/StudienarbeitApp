@@ -1,4 +1,4 @@
-package com.example.studienarbeitapp
+package com.example.studienarbeitapp.ui.login
 
 import androidx.lifecycle.ViewModel
 
