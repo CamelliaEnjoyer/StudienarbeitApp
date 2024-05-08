@@ -10,16 +10,19 @@ class PatientInformationViewModel(private val patientInformationService: Patient
     val patientInfo = MutableLiveData<PatientInformationModel>()
 
     fun getPatientDataFromService() {
-        patientInformationService.fetchPatientInformation(
-            onSuccess = { patientInformationResponse ->
-                // Update LiveData with the fetched user data
-                patientInfo.value = patientInformationResponse
-            },
-            onError = { patientInformationResponse2 ->
-                patientInfo.value = patientInformationResponse2
-                // Handle error
-            }
-        )
+        //only load data if not yet loaded
+        if(patientInfo.value == null){
+            patientInformationService.fetchPatientInformation(
+                onSuccess = { patientInformationResponse ->
+                    // Update LiveData with the fetched user data
+                    patientInfo.value = patientInformationResponse
+                },
+                onError = { patientInformationResponse2 ->
+                    patientInfo.value = patientInformationResponse2
+                    // Handle error
+                }
+            )
+        }
     }
 
 }

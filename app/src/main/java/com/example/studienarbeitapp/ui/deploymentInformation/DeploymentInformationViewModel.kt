@@ -10,14 +10,16 @@ class DeploymentInformationViewModel(private val deployInformationService: Deply
     val deploymentInfo = MutableLiveData<DeploymentInformationModel>()
 
     fun getDeploymentInfoFromService() {
-        deployInformationService.fetchDeplyomentInformation(
-            onSuccess = { deploymentTimeResponse ->
-                // Update LiveData with the fetched user data
-                deploymentInfo.value = deploymentTimeResponse
-            },
-            onError = {
-                // Handle error
-            }
-        )
+        if(deploymentInfo.value == null){
+            deployInformationService.fetchDeplyomentInformation(
+                onSuccess = { deploymentTimeResponse ->
+                    // Update LiveData with the fetched user data
+                    deploymentInfo.value = deploymentTimeResponse
+                },
+                onError = {
+                    // Handle error
+                }
+            )
+        }
     }
 }

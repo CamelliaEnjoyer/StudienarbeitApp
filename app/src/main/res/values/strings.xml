@@ -32,4 +32,7 @@
     <string name="deplinfo_textDeplAdditionalInfoDesc">Additional information:</string>
     <string name="deplinfo_buttonHospital">Select hospital</string>
     <string name="deplinfo_textid">Deployment id</string>
+    <string name="datetimepicker_today">today</string>
+    <string name="datetimepicker_title">Select date and time</string>
+    <string name="depltime_select">Select</string>
 </resources>

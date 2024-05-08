@@ -9,7 +9,8 @@ import com.google.gson.Gson
 
 class PatientInformationService(private val context: Context) {
 
-    private val gson = Gson();
+    private val gson = Gson()
+    var i = 0
 
     fun fetchPatientInformation(onSuccess: (PatientInformationModel) -> Unit, onError: (PatientInformationModel) -> Unit) {
         //ToDo: Wie url und wo am besten halten...
@@ -28,8 +29,9 @@ class PatientInformationService(private val context: Context) {
             },
             { error ->
                 println("patientinformation fetching is not working" + error.message)
-                val testModel = PatientInformationModel("1", "2", "3", "4", "5", "6", "7")
-                onError(testModel)
+                val empty = PatientInformationModel("", "", "",
+                    "", "", "", "")
+                onError(empty)
             }
         )
 

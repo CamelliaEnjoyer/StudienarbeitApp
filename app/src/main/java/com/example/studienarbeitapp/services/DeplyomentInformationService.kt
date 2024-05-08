@@ -6,6 +6,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.models.DeploymentInformationModel
 import com.google.gson.Gson
+import org.json.JSONObject
 
 class DeplyomentInformationService(private val context: Context) {
 
