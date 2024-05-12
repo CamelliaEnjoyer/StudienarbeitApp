@@ -5,34 +5,35 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.studienarbeitapp.helper.DateHelper
-import com.example.studienarbeitapp.models.DeploymentInformationModel
-import com.example.studienarbeitapp.models.DeploymentTimeModel
+import com.example.studienarbeitapp.models.request.RequestDeploymentTimeModel
+import com.example.studienarbeitapp.models.response.ResponseDeploymentTimeModel
 import com.example.studienarbeitapp.services.DeploymentTimeService
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 class DeploymentTimeViewModel(private val deploymentTimeService: DeploymentTimeService) : ViewModel() {
 
-    val deploymentTime = MutableLiveData<DeploymentTimeModel>()
+    val deploymentTimeResponse = MutableLiveData<ResponseDeploymentTimeModel>()
+    val deploymentTimeRequest = MutableLiveData<RequestDeploymentTimeModel>().apply {
+        value = RequestDeploymentTimeModel("", "", "", "", "")
+    }
 
     fun getDeploymentTimeFromService() {
-        if(deploymentTime.value == null){
+        if(deploymentTimeResponse.value == null){
             deploymentTimeService.fetchDeplyomentTime(
                 onSuccess = { deploymentTimeResponse ->
                     // Update LiveData with the fetched user data
-                    deploymentTime.value = deploymentTimeResponse
+                    this.deploymentTimeResponse.value = deploymentTimeResponse
                 },
                 onError = { emptyTimeResponse ->
                     // Set empty response as value
-                    deploymentTime.value = emptyTimeResponse
+                    deploymentTimeResponse.value = emptyTimeResponse
                 }
             )
         }
     }
 
     fun sendDeploymentInformation(context: Context){
-        val deploymentTimeModel = deploymentTime.value
+        val deploymentTimeModel = deploymentTimeRequest.value
         if (deploymentTimeModel != null) {
             deploymentTimeService.sendDeploymentInformation(deploymentTimeModel, onSuccess = {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
@@ -44,22 +45,22 @@ class DeploymentTimeViewModel(private val deploymentTimeService: DeploymentTimeS
     }
 
     fun setStartTime(date: Date) {
-        deploymentTime.value!!.start = DateHelper.formatDate(date)
+        deploymentTimeRequest.value!!.start = DateHelper.formatDate(date)
     }
 
     fun setArrivalOnSite(date: Date) {
-        deploymentTime.value!!.arrivalOnSite = DateHelper.formatDate(date)
+        deploymentTimeRequest.value!!.arrivalOnSite = DateHelper.formatDate(date)
     }
 
     fun setPatientAdmitted(date: Date) {
-        deploymentTime.value!!.patientAdmitted = DateHelper.formatDate(date)
+        deploymentTimeRequest.value!!.patientAdmitted = DateHelper.formatDate(date)
     }
 
     fun setArrivalOnSite2(date: Date) {
-        deploymentTime.value!!.arrivalOnSite2 = DateHelper.formatDate(date)
+        deploymentTimeRequest.value!!.arrivalOnSite2 = DateHelper.formatDate(date)
     }
 
     fun setEndTime(date: Date) {
-        deploymentTime.value!!.end = DateHelper.formatDate(date)
+        deploymentTimeRequest.value!!.end = DateHelper.formatDate(date)
     }
 }

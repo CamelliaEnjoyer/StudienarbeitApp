@@ -4,36 +4,49 @@ import android.content.Context
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.example.studienarbeitapp.models.PatientInformationModel
+import com.example.studienarbeitapp.R
+import com.example.studienarbeitapp.helper.StorageHelper
+import com.example.studienarbeitapp.models.response.ResponsePatientInformationModel
 import com.google.gson.Gson
 
 class PatientInformationService(private val context: Context) {
 
     private val gson = Gson()
-    var i = 0
+    private val baseUrl = context.getString(R.string.base_url)
 
-    fun fetchPatientInformation(onSuccess: (PatientInformationModel) -> Unit, onError: (PatientInformationModel) -> Unit) {
+    fun fetchPatientInformation(onSuccess: (ResponsePatientInformationModel) -> Unit, onError: (ResponsePatientInformationModel) -> Unit) {
         //ToDo: Wie url und wo am besten halten...
-        val url = ""
+        val url = baseUrl + ""
+
+        val token = StorageHelper.getToken()
 
         // Instantiate the RequestQueue with the provided Context
         val queue = Volley.newRequestQueue(context)
 
         // Request a JSONObject response from the provided URL.
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+        val jsonObjectRequest = object : JsonObjectRequest(
+            Method.GET, url, null,
             { response ->
                 // Parse the JSON response and call onSuccess callback
                 println(response.toString())
-                val patientInfo = gson.fromJson(response.toString(), PatientInformationModel::class.java)
+                val patientInfo = gson.fromJson(response.toString(), ResponsePatientInformationModel::class.java)
                 onSuccess(patientInfo)
             },
             { error ->
-                println("patientinformation fetching is not working" + error.message)
-                val empty = PatientInformationModel("", "", "",
+                println("Patient information fetching is not working" + error.message)
+                val empty = ResponsePatientInformationModel("", "", "",
                     "", "", "", "")
                 onError(empty)
+            }) {
+
+            // Override getHeaders to include token in request headers
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                // Add token to Authorization header
+                headers["Authorization"] = "Bearer $token"
+                return headers
             }
-        )
+        }
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)

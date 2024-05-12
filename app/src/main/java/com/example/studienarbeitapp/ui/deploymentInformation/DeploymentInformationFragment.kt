@@ -34,6 +34,12 @@ class DeploymentInformationFragment : Fragment() {
         _binding = FragmentDeploynentinformationBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val textViewKeyword = binding.textdDeplKeywordValue
+        val textViewCaller = binding.textCallerValue
+        val textViewLocation = binding.textDeplLocValue
+        val textViewId = binding.textViewIdValue
+        val textViewAdditionalInfo = binding.textDeplAdditionalInfoValue
+
         deploymentInformationViewModel.deploymentInfo.observe(viewLifecycleOwner) {
 
         }

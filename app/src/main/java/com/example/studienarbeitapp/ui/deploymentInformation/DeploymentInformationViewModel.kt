@@ -2,12 +2,12 @@ package com.example.studienarbeitapp.ui.deploymentInformation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.studienarbeitapp.models.DeploymentInformationModel
+import com.example.studienarbeitapp.models.response.ResponseDeploymentInformationModel
 import com.example.studienarbeitapp.services.DeplyomentInformationService
 
 class DeploymentInformationViewModel(private val deployInformationService: DeplyomentInformationService) : ViewModel() {
 
-    val deploymentInfo = MutableLiveData<DeploymentInformationModel>()
+    val deploymentInfo = MutableLiveData<ResponseDeploymentInformationModel>()
 
     fun getDeploymentInfoFromService() {
         if(deploymentInfo.value == null){

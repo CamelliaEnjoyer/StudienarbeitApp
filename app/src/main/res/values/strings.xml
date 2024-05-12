@@ -39,4 +39,7 @@
     <string name="login_buttonLogin">Sign in</string>
     <string name="login_editPin">Pin</string>
     <string name="login_editUsername">Username</string>
+    <string name="login_selectVehicle">Select a vehicle:</string>
+    <string name="base_url">asofihasflkh</string>
+    <string name="logout">Sign out</string>
 </resources>

@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.studienarbeitapp.R
@@ -16,13 +14,7 @@ import com.example.studienarbeitapp.helper.DateHelper
 import com.example.studienarbeitapp.services.DeploymentTimeService
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import java.util.Date
-import java.util.Locale
-import kotlin.time.Duration.Companion.days
 
 class DeploymentTimeFragment : Fragment() {
 
@@ -103,8 +95,11 @@ class DeploymentTimeFragment : Fragment() {
         buttonArrivalOnSite2.setOnClickListener(onClickListener)
         buttonEnd.setOnClickListener(onClickListener)
 
-        deploymentTimeViewModel.deploymentTime.observe(viewLifecycleOwner) {
+        deploymentTimeViewModel.deploymentTimeResponse.observe(viewLifecycleOwner) {
             textViewReceived.text = it.alarmReceived
+        }
+
+        deploymentTimeViewModel.deploymentTimeRequest.observe(viewLifecycleOwner) {
             textViewStart.text = it.start
             textViewArrivalOnSite.text = it.arrivalOnSite
             textViewPatientAdmitted.text = it.patientAdmitted

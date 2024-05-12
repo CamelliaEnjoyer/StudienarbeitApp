@@ -4,58 +4,72 @@ import android.content.Context
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.example.studienarbeitapp.models.DeploymentInformationModel
-import com.example.studienarbeitapp.models.DeploymentTimeModel
-import com.example.studienarbeitapp.models.PatientInformationModel
+import com.example.studienarbeitapp.R
+import com.example.studienarbeitapp.helper.StorageHelper
+import com.example.studienarbeitapp.models.request.RequestDeploymentTimeModel
+import com.example.studienarbeitapp.models.response.ResponseDeploymentTimeModel
 import com.google.gson.Gson
 import org.json.JSONObject
 
 class DeploymentTimeService(private val context: Context) {
 
-
     private val gson = Gson();
+    private val baseUrl = context.getString(R.string.base_url)
 
-    fun fetchDeplyomentTime (onSuccess: (DeploymentTimeModel) -> Unit, onError: (DeploymentTimeModel) -> Unit) {
+    // fetching deployment time (only alarm received)
+    fun fetchDeplyomentTime (onSuccess: (ResponseDeploymentTimeModel) -> Unit, onError: (ResponseDeploymentTimeModel) -> Unit) {
         //ToDo: Wie url und wo am besten halten...
-        val url = ""
+        val url = baseUrl + ""
 
         // Instantiate the RequestQueue with the provided Context
         val queue = Volley.newRequestQueue(context)
 
+        val token = StorageHelper.getToken()
+
         // Request a JSONObject response from the provided URL.
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET, url, null,
+        val jsonObjectRequest = object : JsonObjectRequest(
+            Method.GET, url, null,
             { response ->
                 // Parse the JSON response and call onSuccess callback
                 println(response.toString())
-                val deplyomentTime = gson.fromJson(response.toString(), DeploymentTimeModel::class.java)
-                onSuccess(deplyomentTime)
+                val deploymentTime = gson.fromJson(response.toString(), ResponseDeploymentTimeModel::class.java)
+                onSuccess(deploymentTime)
             },
             { error ->
-                println("deplyomenttime fetching is not working" + error.message)
-                val empty = DeploymentTimeModel("", "", "",
-                    "", "", "")
+                println("Deployment time fetching is not working" + error.message)
+                val empty = ResponseDeploymentTimeModel("")
                 onError(empty)
+            }) {
+
+            // Override getHeaders to include token in request headers
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                // Add token to Authorization header
+                headers["Authorization"] = "Bearer $token"
+                return headers
             }
-        )
+        }
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)
     }
 
     // Method to send DeploymentInformationModel using a PUT request
-    fun sendDeploymentInformation(deploymentTime: DeploymentTimeModel, onSuccess: (String) -> Unit,
+    fun sendDeploymentInformation(deploymentTime: RequestDeploymentTimeModel, onSuccess: (String) -> Unit,
                                   onError: (String) -> Unit) {
         //ToDo: Define your PUT request URL
-        val url = ""
+        val url = baseUrl + ""
 
         val queue = Volley.newRequestQueue(context)
 
+        val token = StorageHelper.getToken()
+
         // Convert DeploymentInformationModel to JSON string
-        val jsonBody = JSONObject(gson.toJson(deploymentTime))
+        val jsonObject = JSONObject(gson.toJson(deploymentTime))
 
         // Request a JSONObject response from the provided URL.
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.PUT, url, jsonBody,
+        val jsonObjectRequest = object : JsonObjectRequest(
+            Method.PUT, url, jsonObject,
             { response ->
                 // Handle successful response
                 println(response.toString())
@@ -65,8 +79,17 @@ class DeploymentTimeService(private val context: Context) {
                 // Handle error
                 println("Error sending deployment information: ${error.message}")
                 onError(error.message ?: "Unknown error occurred")
+            }) {
+
+            // Override getHeaders to include token in request headers
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                // Add token to Authorization header
+                headers["Authorization"] = "Bearer $token"
+                return headers
             }
-        )
+        }
+
         queue.add(jsonObjectRequest)
     }
 }

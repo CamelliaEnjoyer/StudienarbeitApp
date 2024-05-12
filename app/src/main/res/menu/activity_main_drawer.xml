@@ -16,5 +16,9 @@
             android:id="@+id/nav_deploymentTime"
             android:icon="@drawable/baseline_access_time_24"
             android:title="@string/menu_deployment_time" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/baseline_logout_24"
+            android:title="@string/logout" />
     </group>
 </menu>

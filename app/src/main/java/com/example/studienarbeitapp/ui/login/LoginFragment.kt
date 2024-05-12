@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.studienarbeitapp.R
 import com.example.studienarbeitapp.databinding.FragmentLoginBinding
+import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.services.LoginService
 
 class LoginFragment : Fragment() {
@@ -21,12 +22,16 @@ class LoginFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        StorageHelper.initialize(requireContext())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         val loginService = LoginService(requireContext())
         val factory = LoginViewModelFactory(loginService)
         val loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
@@ -62,6 +67,7 @@ class LoginFragment : Fragment() {
                 loginService.sendLoginInformation(username, pin, selectedVehicle,
                     onSuccess = {
                         if(it.isNotEmpty()){
+                            StorageHelper.saveToken(it)
                             findNavController().navigate(R.id.action_loginFragment_to_nav_deploymentInformation)
                         }
                         Toast.makeText(requireContext(), "Login information is wrong", Toast.LENGTH_SHORT).show();
@@ -72,6 +78,8 @@ class LoginFragment : Fragment() {
                     })
             }
         }
+
+        loginViewModel.getDropDownValues()
 
         return root
     }
