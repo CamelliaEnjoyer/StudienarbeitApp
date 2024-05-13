@@ -34,4 +34,10 @@ object StorageHelper {
     fun getToken(): String? {
         return sharedPreferences.getString(KEY_TOKEN, null)
     }
+
+    fun clearStorage() {
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+    }
 }

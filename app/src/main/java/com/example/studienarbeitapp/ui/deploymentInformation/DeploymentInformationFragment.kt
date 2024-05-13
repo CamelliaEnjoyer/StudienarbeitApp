@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.studienarbeitapp.databinding.FragmentDeploynentinformationBinding
-import com.example.studienarbeitapp.services.DeploymentTimeService
 import com.example.studienarbeitapp.services.DeplyomentInformationService
-import com.example.studienarbeitapp.ui.deploymentTime.DeploymentTimeViewModelFactory
 
 class DeploymentInformationFragment : Fragment() {
 
@@ -40,7 +37,22 @@ class DeploymentInformationFragment : Fragment() {
         val textViewId = binding.textViewIdValue
         val textViewAdditionalInfo = binding.textDeplAdditionalInfoValue
 
-        deploymentInformationViewModel.deploymentInfo.observe(viewLifecycleOwner) {
+        val imageViewLoc1 = binding.imageView1
+        val imageViewLoc2 = binding.imageView2
+
+        deploymentInformationViewModel.deploymentInfoResponse.observe(viewLifecycleOwner) {
+            textViewId.text = it.id
+            textViewKeyword.text = it.keyword
+            textViewCaller.text = it.caller
+            textViewLocation.text = it.normalizedAddress
+            textViewAdditionalInfo.text = it.additionalInfo
+        }
+
+        imageViewLoc1.setOnClickListener {
+
+        }
+
+        imageViewLoc2.setOnClickListener {
 
         }
 

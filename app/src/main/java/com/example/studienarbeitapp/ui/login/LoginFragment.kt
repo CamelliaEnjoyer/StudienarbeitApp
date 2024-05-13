@@ -90,7 +90,8 @@ class LoginFragment : Fragment() {
 
 
     private fun navigateToMainActivity() {
-        findNavController().navigate(R.id.action_loginFragment_to_main_activity)
+        val intent = Intent(activity, MainActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

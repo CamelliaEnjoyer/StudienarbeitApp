@@ -54,12 +54,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/textview_value_style"
         android:padding="8dp"
         android:textSize="16sp"
         android:textStyle="italic"
-        android:background="@drawable/textview_value_style"
-        app:layout_constraintEnd_toStartOf="@+id/buttonLocate1"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/imageView1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDeplLocDesc" />
 
@@ -111,11 +110,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/textview_value_style"
         android:padding="8dp"
         android:textSize="16sp"
         android:textStyle="italic"
-        android:background="@drawable/textview_value_style"
-        app:layout_constraintEnd_toStartOf="@+id/buttonPatientSecured"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDeplLoc2Desc" />
 
@@ -149,28 +148,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDeplAdditionalInfoDesc" />
-
-    <Button
-        android:id="@+id/buttonLocate1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="Button"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDeplLocDesc" />
-
-    <Button
-        android:id="@+id/buttonPatientSecured"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="Button"
-        android:textStyle="italic"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDeplLoc2Desc" />
 
     <Button
         android:id="@+id/buttonHospital"
@@ -212,5 +189,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDeplIdDesc" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="47dp"
+        android:layout_height="43dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/baseline_add_location_alt_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDeplLocDesc" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="47dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/baseline_add_location_alt_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDeplLoc2Desc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
