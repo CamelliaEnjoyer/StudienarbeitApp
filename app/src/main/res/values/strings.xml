@@ -32,4 +32,14 @@
     <string name="deplinfo_textDeplAdditionalInfoDesc">Additional information:</string>
     <string name="deplinfo_buttonHospital">Select hospital</string>
     <string name="deplinfo_textid">Deployment id</string>
+    <string name="datetimepicker_today">today</string>
+    <string name="datetimepicker_title">Select date and time</string>
+    <string name="depltime_select">Select</string>
+    <!-- Strings related to login -->
+    <string name="login_buttonLogin">Sign in</string>
+    <string name="login_editPin">Pin</string>
+    <string name="login_editUsername">Username</string>
+    <string name="login_selectVehicle">Select a vehicle:</string>
+    <string name="base_url">asofihasflkh</string>
+    <string name="logout">Sign out</string>
 </resources>

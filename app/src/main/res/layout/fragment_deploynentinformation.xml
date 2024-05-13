@@ -13,10 +13,11 @@
         android:layout_marginStart="16dp"
         android:padding="8dp"
         android:layout_marginTop="16dp"
+        android:textSize="16sp"
         android:text="@string/deplinfo_textDeplKeywordDesc"
         android:textStyle="italic|bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewIdValue" />
 
     <TextView
         android:id="@+id/textdDeplKeywordValue"
@@ -26,9 +27,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:padding="8dp"
+        android:textSize="16sp"
         android:textStyle="italic"
         android:background="@drawable/textview_value_style"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDeplKeywordDesc" />
@@ -40,6 +41,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:padding="8dp"
+        android:textSize="16sp"
         android:textStyle="italic|bold"
         android:text="@string/deplinfo_textDeplLocDesc"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,12 +54,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:padding="8dp"
-        android:textStyle="italic"
         android:background="@drawable/textview_value_style"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/buttonStart"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/imageView1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDeplLocDesc" />
 
@@ -67,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:textSize="16sp"
         android:padding="8dp"
         android:textStyle="italic|bold"
         android:text="@string/deplinfo_textCallerDesc"
@@ -81,9 +83,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:padding="8dp"
+        android:textSize="16sp"
         android:textStyle="italic"
         android:background="@drawable/textview_value_style"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textCallerDesc" />
@@ -95,6 +97,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:padding="8dp"
+        android:textSize="16sp"
         android:textStyle="italic|bold"
         android:text="@string/deplinfo_textDeplLoc2Desc"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,11 +110,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:padding="8dp"
-        android:textStyle="italic"
         android:background="@drawable/textview_value_style"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/buttonPatientSecured"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDeplLoc2Desc" />
 
@@ -122,6 +125,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:padding="8dp"
+        android:textSize="16sp"
         android:textStyle="italic|bold"
         android:text="@string/deplinfo_textDeplAdditionalInfoDesc"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,35 +141,13 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/textview_value_style"
         android:lines="3"
+        android:textSize="16sp"
         android:padding="8dp"
         android:textStyle="italic"
-        android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDeplAdditionalInfoDesc"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/buttonStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="Button"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDeplLocDesc" />
-
-    <Button
-        android:id="@+id/buttonPatientSecured"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="Button"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDeplLoc2Desc" />
+        app:layout_constraintTop_toBottomOf="@+id/textDeplAdditionalInfoDesc" />
 
     <Button
         android:id="@+id/buttonHospital"
@@ -175,6 +157,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/deplinfo_buttonHospital"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDeplLoc2Value" />
@@ -186,24 +169,45 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:padding="8dp"
+        android:textSize="16sp"
         android:textStyle="italic|bold"
         android:text="@string/deplinfo_textid"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewIdValue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textStyle="italic"
         android:padding="8dp"
-        android:text="TextView"
+        android:textSize="16sp"
         android:background="@drawable/textview_value_style"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDeplIdDesc" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="47dp"
+        android:layout_height="43dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/baseline_add_location_alt_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDeplLocDesc" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="47dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/baseline_add_location_alt_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDeplLoc2Desc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
