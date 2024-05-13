@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/nav_deploymentInformation">
 
     <fragment
         android:id="@+id/nav_patientInformation"
@@ -15,20 +15,21 @@
         android:id="@+id/nav_deploymentInformation"
         android:name="com.example.studienarbeitapp.ui.deploymentInformation.DeploymentInformationFragment"
         android:label="@string/menu_deployment_information"
-        tools:layout="@layout/fragment_deploynentinformation" />
+        tools:layout="@layout/fragment_deploynentinformation" >
+        <action
+            android:id="@+id/action_nav_deploymentInformation_to_loginActivity2"
+            app:destination="@id/loginActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_deploymentTime"
         android:name="com.example.studienarbeitapp.ui.deploymentTime.DeploymentTimeFragment"
         android:label="@string/menu_deployment_time"
         tools:layout="@layout/fragment_deploymenttime" />
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.example.studienarbeitapp.ui.login.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_nav_deploymentInformation"
-            app:destination="@id/nav_deploymentInformation" />
-    </fragment>
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.studienarbeitapp.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+
 </navigation>

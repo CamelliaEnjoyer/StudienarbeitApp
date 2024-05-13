@@ -1,18 +1,22 @@
 package com.example.studienarbeitapp.ui.login
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
+import com.example.studienarbeitapp.MainActivity
 import com.example.studienarbeitapp.R
 import com.example.studienarbeitapp.databinding.FragmentLoginBinding
 import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.services.LoginService
+
 
 class LoginFragment : Fragment() {
 
@@ -68,13 +72,13 @@ class LoginFragment : Fragment() {
                     onSuccess = {
                         if(it.isNotEmpty()){
                             StorageHelper.saveToken(it)
-                            findNavController().navigate(R.id.action_loginFragment_to_nav_deploymentInformation)
+                            navigateToMainActivity()
                         }
                         Toast.makeText(requireContext(), "Login information is wrong", Toast.LENGTH_SHORT).show();
                     },
                     onError = {
                         Toast.makeText(requireContext(), "Login request failed, server unavailable", Toast.LENGTH_SHORT).show();
-                        findNavController().navigate(R.id.action_loginFragment_to_nav_deploymentInformation)
+                        navigateToMainActivity()
                     })
             }
         }
@@ -82,6 +86,11 @@ class LoginFragment : Fragment() {
         loginViewModel.getDropDownValues()
 
         return root
+    }
+
+
+    private fun navigateToMainActivity() {
+        findNavController().navigate(R.id.action_loginFragment_to_main_activity)
     }
 
     override fun onDestroyView() {
