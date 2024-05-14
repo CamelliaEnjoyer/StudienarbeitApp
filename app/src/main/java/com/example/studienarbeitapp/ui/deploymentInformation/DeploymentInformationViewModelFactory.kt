@@ -3,9 +3,9 @@ package com.example.studienarbeitapp.ui.deploymentInformation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.studienarbeitapp.services.DeplyomentInformationService
+import com.example.studienarbeitapp.services.DeploymentInformationService
 
-class DeploymentInformationViewModelFactory (private val deployInformationService: DeplyomentInformationService) : ViewModelProvider.Factory {
+class DeploymentInformationViewModelFactory (private val deployInformationService: DeploymentInformationService) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         if (modelClass.isAssignableFrom(DeploymentInformationViewModel::class.java)) {

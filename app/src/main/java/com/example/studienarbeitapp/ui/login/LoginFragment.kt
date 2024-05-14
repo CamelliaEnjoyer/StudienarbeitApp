@@ -9,10 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavDeepLinkRequest
-import androidx.navigation.fragment.findNavController
 import com.example.studienarbeitapp.MainActivity
-import com.example.studienarbeitapp.R
 import com.example.studienarbeitapp.databinding.FragmentLoginBinding
 import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.services.LoginService
@@ -66,7 +63,7 @@ class LoginFragment : Fragment() {
             val selectedVehicle = dropDown.selectedItem.toString()
 
             if(username.isEmpty() || pin.isEmpty() || selectedVehicle.isEmpty()){
-                Toast.makeText(requireContext(), "Please enter username and pin", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Please enter username and pin", Toast.LENGTH_SHORT).show()
             } else {
                 loginService.sendLoginInformation(username, pin, selectedVehicle,
                     onSuccess = {
@@ -74,10 +71,10 @@ class LoginFragment : Fragment() {
                             StorageHelper.saveToken(it)
                             navigateToMainActivity()
                         }
-                        Toast.makeText(requireContext(), "Login information is wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Login information is wrong", Toast.LENGTH_SHORT).show()
                     },
                     onError = {
-                        Toast.makeText(requireContext(), "Login request failed, server unavailable", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Login request failed, server unavailable", Toast.LENGTH_SHORT).show()
                         navigateToMainActivity()
                     })
             }

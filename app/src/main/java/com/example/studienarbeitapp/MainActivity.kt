@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import com.example.studienarbeitapp.databinding.ActivityMainBinding
 import com.example.studienarbeitapp.helper.StorageHelper
-import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
 

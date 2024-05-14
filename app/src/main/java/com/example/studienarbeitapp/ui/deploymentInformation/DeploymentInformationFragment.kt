@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.studienarbeitapp.R
 import com.example.studienarbeitapp.databinding.FragmentDeploynentinformationBinding
 import com.example.studienarbeitapp.helper.LocationHelper
-import com.example.studienarbeitapp.services.DeplyomentInformationService
+import com.example.studienarbeitapp.services.DeploymentInformationService
 
 class DeploymentInformationFragment : Fragment() {
 
@@ -38,7 +38,7 @@ class DeploymentInformationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val deploymentInformationService = DeplyomentInformationService(requireContext())
+        val deploymentInformationService = DeploymentInformationService(requireContext())
         val factory = DeploymentInformationViewModelFactory(deploymentInformationService)
         val deploymentInformationViewModel =
             ViewModelProvider(this, factory)[DeploymentInformationViewModel::class.java]

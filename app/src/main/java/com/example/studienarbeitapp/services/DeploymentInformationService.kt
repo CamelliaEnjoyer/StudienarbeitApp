@@ -1,7 +1,6 @@
 package com.example.studienarbeitapp.services
 
 import android.content.Context
-import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.R
@@ -9,12 +8,12 @@ import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.models.response.ResponseDeploymentInformationModel
 import com.google.gson.Gson
 
-class DeplyomentInformationService(private val context: Context) {
+class DeploymentInformationService(private val context: Context) {
 
-    private val gson = Gson();
+    private val gson = Gson()
     private val baseUrl = context.getString(R.string.base_url)
 
-    fun fetchDeplyomentInformation(onSuccess: (ResponseDeploymentInformationModel) -> Unit, onError: () -> Unit) {
+    fun fetchDeploymentInformation(onSuccess: (ResponseDeploymentInformationModel) -> Unit, onError: () -> Unit) {
         //ToDo: Wie url und wo am besten halten...
         val url = ""
 

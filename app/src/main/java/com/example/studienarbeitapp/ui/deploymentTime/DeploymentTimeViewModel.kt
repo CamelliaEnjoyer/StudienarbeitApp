@@ -19,7 +19,7 @@ class DeploymentTimeViewModel(private val deploymentTimeService: DeploymentTimeS
 
     fun getDeploymentTimeFromService() {
         if(deploymentTimeResponse.value == null){
-            deploymentTimeService.fetchDeplyomentTime(
+            deploymentTimeService.fetchDeploymentTime(
                 onSuccess = { deploymentTimeResponse ->
                     // Update LiveData with the fetched user data
                     this.deploymentTimeResponse.value = deploymentTimeResponse

@@ -1,7 +1,6 @@
 package com.example.studienarbeitapp.services
 
 import android.content.Context
-import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.R
@@ -13,11 +12,11 @@ import org.json.JSONObject
 
 class DeploymentTimeService(private val context: Context) {
 
-    private val gson = Gson();
+    private val gson = Gson()
     private val baseUrl = context.getString(R.string.base_url)
 
     // fetching deployment time (only alarm received)
-    fun fetchDeplyomentTime (onSuccess: (ResponseDeploymentTimeModel) -> Unit, onError: (ResponseDeploymentTimeModel) -> Unit) {
+    fun fetchDeploymentTime (onSuccess: (ResponseDeploymentTimeModel) -> Unit, onError: (ResponseDeploymentTimeModel) -> Unit) {
         //ToDo: Wie url und wo am besten halten...
         val url = baseUrl + ""
 
