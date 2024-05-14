@@ -17,8 +17,8 @@
         android:label="@string/menu_deployment_information"
         tools:layout="@layout/fragment_deploynentinformation" >
         <action
-            android:id="@+id/action_nav_deploymentInformation_to_loginActivity2"
-            app:destination="@id/loginActivity" />
+            android:id="@+id/action_nav_deploymentInformation_to_osmFragment"
+            app:destination="@id/osmFragment" />
     </fragment>
 
     <fragment
@@ -26,10 +26,10 @@
         android:name="com.example.studienarbeitapp.ui.deploymentTime.DeploymentTimeFragment"
         android:label="@string/menu_deployment_time"
         tools:layout="@layout/fragment_deploymenttime" />
-    <activity
-        android:id="@+id/loginActivity"
-        android:name="com.example.studienarbeitapp.LoginActivity"
-        android:label="activity_login"
-        tools:layout="@layout/activity_login" />
+    <fragment
+        android:id="@+id/osmFragment"
+        android:name="com.example.studienarbeitapp.OsmFragment"
+        android:label="fragment_osm"
+        tools:layout="@layout/fragment_osm" />
 
 </navigation>

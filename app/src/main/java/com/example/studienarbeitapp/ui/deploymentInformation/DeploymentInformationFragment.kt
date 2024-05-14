@@ -1,11 +1,16 @@
 package com.example.studienarbeitapp.ui.deploymentInformation
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.example.studienarbeitapp.R
 import com.example.studienarbeitapp.databinding.FragmentDeploynentinformationBinding
 import com.example.studienarbeitapp.services.DeplyomentInformationService
 
@@ -49,7 +54,7 @@ class DeploymentInformationFragment : Fragment() {
         }
 
         imageViewLoc1.setOnClickListener {
-
+            findNavController().navigate(R.id.action_nav_deploymentInformation_to_osmFragment)
         }
 
         imageViewLoc2.setOnClickListener {
