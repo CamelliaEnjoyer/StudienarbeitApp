@@ -42,4 +42,5 @@
     <string name="login_selectVehicle">Select a vehicle:</string>
     <string name="base_url">asofihasflkh</string>
     <string name="logout">Sign out</string>
+    <string name="deplinfo_googleMapsPackage">com.google.android.apps.maps</string>
 </resources>

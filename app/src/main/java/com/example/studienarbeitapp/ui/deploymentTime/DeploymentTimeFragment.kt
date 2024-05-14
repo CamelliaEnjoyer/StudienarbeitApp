@@ -15,6 +15,7 @@ import com.example.studienarbeitapp.services.DeploymentTimeService
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog
 import java.util.Date
+import java.util.TimeZone
 
 class DeploymentTimeFragment : Fragment() {
 
@@ -122,12 +123,15 @@ class DeploymentTimeFragment : Fragment() {
     }
 
     private fun openSingleDateAndTimePickerDialog(view: TextView, context: Context, timeSetter: (Date) -> Unit){
+        val currentDateTime = Date()
+        val timezone = TimeZone.getDefault()
         SingleDateAndTimePickerDialog.Builder(context)
             .curved()
             .minutesStep(1)
+            .defaultDate(currentDateTime)
+            .setTimeZone(timezone)
             .displayAmPm(false)
             .title(getString(R.string.datetimepicker_title))
-            .todayText(getString(R.string.datetimepicker_today))
             .displayListener(object : SingleDateAndTimePickerDialog.DisplayListener {
                 override fun onDisplayed(picker: SingleDateAndTimePicker) {
                     // Retrieve the SingleDateAndTimePicker
