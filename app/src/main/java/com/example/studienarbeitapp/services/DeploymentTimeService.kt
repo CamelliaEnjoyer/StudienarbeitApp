@@ -13,17 +13,17 @@ import org.json.JSONObject
 class DeploymentTimeService(private val context: Context) {
 
     private val gson = Gson()
-    private val baseUrl = context.getString(R.string.base_url)
+    //private val baseUrl = context.getString(R.string.base_url)
+    private val baseUrl = "DEPLTIMESERVICE"
 
     // fetching deployment time (only alarm received)
     fun fetchDeploymentTime (onSuccess: (ResponseDeploymentTimeModel) -> Unit, onError: (ResponseDeploymentTimeModel) -> Unit) {
-        //ToDo: Wie url und wo am besten halten...
-        val url = baseUrl + ""
+        val token = StorageHelper.getToken()
+        val deplId = StorageHelper.getDeploymentId()
+        val url = "$baseUrl/$deplId"
 
         // Instantiate the RequestQueue with the provided Context
         val queue = Volley.newRequestQueue(context)
-
-        val token = StorageHelper.getToken()
 
         // Request a JSONObject response from the provided URL.
         val jsonObjectRequest = object : JsonObjectRequest(
@@ -56,12 +56,11 @@ class DeploymentTimeService(private val context: Context) {
     // Method to send DeploymentInformationModel using a PUT request
     fun sendDeploymentInformation(deploymentTime: RequestDeploymentTimeModel, onSuccess: (String) -> Unit,
                                   onError: (String) -> Unit) {
-        //ToDo: Define your PUT request URL
-        val url = baseUrl + ""
+        val token = StorageHelper.getToken()
+        val deplId = StorageHelper.getDeploymentId()
+        val url = "$baseUrl/$deplId"
 
         val queue = Volley.newRequestQueue(context)
-
-        val token = StorageHelper.getToken()
 
         // Convert DeploymentInformationModel to JSON string
         val jsonObject = JSONObject(gson.toJson(deploymentTime))

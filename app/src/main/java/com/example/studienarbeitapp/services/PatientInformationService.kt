@@ -1,7 +1,6 @@
 package com.example.studienarbeitapp.services
 
 import android.content.Context
-import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.R
@@ -12,13 +11,13 @@ import com.google.gson.Gson
 class PatientInformationService(private val context: Context) {
 
     private val gson = Gson()
-    private val baseUrl = context.getString(R.string.base_url)
+    //private val baseUrl = context.getString(R.string.base_url)
+    private val baseUrl = "PATIENTINFOSERVICE"
 
     fun fetchPatientInformation(onSuccess: (ResponsePatientInformationModel) -> Unit, onError: (ResponsePatientInformationModel) -> Unit) {
-        //ToDo: Wie url und wo am besten halten...
-        val url = baseUrl + ""
-
         val token = StorageHelper.getToken()
+        val deplId = StorageHelper.getDeploymentId()
+        val url = "$baseUrl/$deplId"
 
         // Instantiate the RequestQueue with the provided Context
         val queue = Volley.newRequestQueue(context)

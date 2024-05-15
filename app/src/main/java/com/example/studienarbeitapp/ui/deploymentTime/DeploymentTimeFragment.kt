@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.studienarbeitapp.R
 import com.example.studienarbeitapp.databinding.FragmentDeploymenttimeBinding
 import com.example.studienarbeitapp.helper.DateHelper
+import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.services.DeploymentTimeService
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog
@@ -109,7 +112,17 @@ class DeploymentTimeFragment : Fragment() {
         }
 
         buttonEndDeployment.setOnClickListener{
-            deploymentTimeViewModel.sendDeploymentInformation(requireContext())
+            deploymentTimeViewModel.sendDeploymentInformation(requireContext(), onSuccess = {
+                StorageHelper.clearStorage()
+
+                findNavController().navigate(R.id.action_nav_deploymentTime_to_nav_deploymentInformation)
+            }, onError = {
+                //ToDo: Delete 2 lines
+                StorageHelper.clearStorage()
+                findNavController().navigate(R.id.action_nav_deploymentTime_to_nav_deploymentInformation)
+
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            })
         }
 
         deploymentTimeViewModel.getDeploymentTimeFromService()

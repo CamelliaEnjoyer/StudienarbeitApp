@@ -32,14 +32,15 @@ class DeploymentTimeViewModel(private val deploymentTimeService: DeploymentTimeS
         }
     }
 
-    fun sendDeploymentInformation(context: Context){
+    fun sendDeploymentInformation(context: Context, onSuccess: () -> Unit,
+                                  onError: (String) -> Unit){
         val deploymentTimeModel = deploymentTimeRequest.value
         if (deploymentTimeModel != null) {
             deploymentTimeService.sendDeploymentInformation(deploymentTimeModel, onSuccess = {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                onSuccess()
             },
             onError = {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                onError(it)
             })
         }
     }

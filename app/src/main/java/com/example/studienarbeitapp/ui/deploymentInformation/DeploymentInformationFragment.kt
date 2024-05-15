@@ -4,17 +4,23 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.Manifest
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.R
 import com.example.studienarbeitapp.databinding.FragmentDeploynentinformationBinding
 import com.example.studienarbeitapp.helper.LocationHelper
+import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.services.DeploymentInformationService
 
 class DeploymentInformationFragment : Fragment() {
@@ -32,6 +38,17 @@ class DeploymentInformationFragment : Fragment() {
     private val googleMapsPackage = R.string.deplinfo_googleMapsPackage
     private lateinit var primaryLocation: String
 
+    private lateinit var handler: Handler
+    private lateinit var runnable: Runnable
+    private var delay: Long = 30000 // 30 seconds in milliseconds
+    private var waitingDialog: Dialog? = null
+    var i = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        println("THIS IS THE FKING DEPL ID" + StorageHelper.getDeploymentId())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,38 +63,52 @@ class DeploymentInformationFragment : Fragment() {
         _binding = FragmentDeploynentinformationBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        locationHelper = LocationHelper(requireContext())
 
-        val textViewKeyword = binding.textdDeplKeywordValue
-        val textViewCaller = binding.textCallerValue
-        val textViewLocation = binding.textDeplLocValue
-        val textViewId = binding.textViewIdValue
-        val textViewAdditionalInfo = binding.textDeplAdditionalInfoValue
 
-        val imageViewLoc1 = binding.imageView1
-        val imageViewLoc2 = binding.imageView2
-
-        deploymentInformationViewModel.getDeploymentInfoFromService()
-
-        deploymentInformationViewModel.deploymentInfoResponse.observe(viewLifecycleOwner) {
-            textViewId.text = it.id
-            textViewKeyword.text = it.keyword
-            textViewCaller.text = it.caller
-            textViewLocation.text = it.normalizedAddress
-            primaryLocation = it.normalizedAddress
-            textViewAdditionalInfo.text = it.additionalInfo
+        handler = Handler()
+        runnable = Runnable {
+            getDeployment()
+            handler.postDelayed(runnable, delay)
         }
 
-        imageViewLoc1.setOnClickListener {
-            if(this::primaryLocation.isInitialized){
-                getGoogleDirections(primaryLocation)
-            } else {
-                getGoogleDirections()
+        if(StorageHelper.getDeploymentId().isNullOrEmpty()){
+            handler.post(runnable)
+            showWaitingDialog()
+        } else {
+            handler.removeCallbacks(runnable)
+            locationHelper = LocationHelper(requireContext())
+
+            val textViewKeyword = binding.textdDeplKeywordValue
+            val textViewCaller = binding.textCallerValue
+            val textViewLocation = binding.textDeplLocValue
+            val textViewId = binding.textViewIdValue
+            val textViewAdditionalInfo = binding.textDeplAdditionalInfoValue
+
+            val imageViewLoc1 = binding.imageView1
+            val imageViewLoc2 = binding.imageView2
+
+            deploymentInformationViewModel.getDeploymentInfoFromService()
+
+            deploymentInformationViewModel.deploymentInfoResponse.observe(viewLifecycleOwner) {
+                textViewId.text = it.id
+                textViewKeyword.text = it.keyword
+                textViewCaller.text = it.caller
+                textViewLocation.text = it.normalizedAddress
+                primaryLocation = it.normalizedAddress
+                textViewAdditionalInfo.text = it.additionalInfo
             }
-        }
 
-        imageViewLoc2.setOnClickListener {
-            getGoogleDirections("Hospital")
+            imageViewLoc1.setOnClickListener {
+                if(this::primaryLocation.isInitialized){
+                    getGoogleDirections(primaryLocation)
+                } else {
+                    getGoogleDirections()
+                }
+            }
+
+            imageViewLoc2.setOnClickListener {
+                getGoogleDirections("Hospital")
+            }
         }
 
         return root
@@ -117,7 +148,6 @@ class DeploymentInformationFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun getGoogleDirections() {
@@ -148,5 +178,51 @@ class DeploymentInformationFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun getDeployment() {
+        val url = "YOUR_API_ENDPOINT"
+        i++
+
+        val stringRequest = StringRequest(
+            Request.Method.GET, url,
+            { response ->
+                // Check if the response contains an ID
+                if (!response.toString().isNullOrEmpty()) {
+                    // Check if the response contains an ID
+                    if (response.toString().isNotEmpty()) {
+                        hideWaitingDialog()
+                        StorageHelper.saveDeploymentId(response.toString())
+                    }
+                }
+            },
+            { error ->
+                println("THIS IS IIIII$i")
+                if(i == 2){
+                    StorageHelper.saveDeploymentId("ISTHISWORKINGHMMM")
+                    hideWaitingDialog()
+                }
+            })
+
+        // Add the request to the RequestQueue.
+        Volley.newRequestQueue(requireContext()).add(stringRequest)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacks(runnable)
+    }
+
+    private fun showWaitingDialog() {
+        waitingDialog = Dialog(requireContext())
+        waitingDialog?.apply {
+            setContentView(R.layout.dialog_waiting)
+            setCancelable(false)
+            show()
+        }
+    }
+
+    private fun hideWaitingDialog() {
+        waitingDialog?.dismiss()
     }
 }

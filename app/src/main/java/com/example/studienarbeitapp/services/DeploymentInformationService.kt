@@ -11,13 +11,13 @@ import com.google.gson.Gson
 class DeploymentInformationService(private val context: Context) {
 
     private val gson = Gson()
-    private val baseUrl = context.getString(R.string.base_url)
+    //private val baseUrl = context.getString(R.string.base_url)
+    private val baseUrl = "DEPLINFOOOOOOOOSERVICE"
 
     fun fetchDeploymentInformation(onSuccess: (ResponseDeploymentInformationModel) -> Unit, onError: () -> Unit) {
-        //ToDo: Wie url und wo am besten halten...
-        val url = ""
-
         val token = StorageHelper.getToken()
+        val deplId = StorageHelper.getDeploymentId()
+        val url = "$baseUrl/$deplId"
 
         // Instantiate the RequestQueue with the provided Context
         val queue = Volley.newRequestQueue(context)
