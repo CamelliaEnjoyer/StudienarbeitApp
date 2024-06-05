@@ -40,7 +40,7 @@
     <string name="login_editPin">Pin</string>
     <string name="login_editUsername">Username</string>
     <string name="login_selectVehicle">Select a vehicle:</string>
-    <string name="base_url">asofihasflkh</string>
+    <string name="base_url">http://192.168.2.175:5000/</string>
     <string name="logout">Sign out</string>
     <string name="deplinfo_googleMapsPackage">com.google.android.apps.maps</string>
     <string name="dialog_waitForDeployment">Waiting for deployment</string>

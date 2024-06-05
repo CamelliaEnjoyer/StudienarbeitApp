@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.deploymentTime.DeploymentTimeFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTwoThirds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.67"
+        android:orientation="vertical"/>
+
     <TextView
         android:id="@+id/textAlertEntryDesc"
         android:layout_width="wrap_content"
@@ -14,6 +21,7 @@
         android:layout_marginTop="16dp"
         android:padding="8dp"
         android:text="@string/depltime_textAlertEntryDesc"
+        android:layout_marginEnd="4dp"
         android:textSize="16sp"
         android:textStyle="italic|bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,8 +36,9 @@
         android:background="@drawable/textview_value_style"
         android:padding="8dp"
         android:textSize="16sp"
+        android:layout_marginEnd="4dp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="@+id/textStartTime"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textAlertEntryDesc" />
 
@@ -52,12 +61,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/textview_value_style"
         android:padding="8dp"
         android:textSize="16sp"
+        android:layout_marginEnd="4dp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/buttonStart"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineTwoThirds"
+        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textStartDesc" />
 
@@ -80,11 +90,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/textview_value_style"
         android:padding="8dp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/buttonArrival1"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textArrivalDesc" />
 
@@ -107,12 +117,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/textview_value_style"
         android:padding="8dp"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/buttonPatientSecured"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textPatientSecuredDesc" />
 
@@ -135,17 +145,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/textview_value_style"
         android:padding="8dp"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/buttonArrival2"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textArrival2Desc" />
 
     <TextView
         android:id="@+id/textEndDesc"
+        android:layout_marginEnd="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -163,12 +174,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/textview_value_style"
         android:padding="8dp"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/buttonEnd"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textEndDesc" />
 
@@ -188,57 +199,68 @@
 
     <Button
         android:id="@+id/buttonStart"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="@string/depltime_select"
         android:textSize="16sp"
+        android:layout_marginStart="4dp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintTop_toBottomOf="@+id/textStartDesc" />
 
     <Button
         android:id="@+id/buttonArrival1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="4dp"
         android:text="@string/depltime_select"
         android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintTop_toBottomOf="@+id/textArrivalDesc" />
 
     <Button
         android:id="@+id/buttonPatientSecured"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="4dp"
         android:text="@string/depltime_select"
         android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintTop_toBottomOf="@+id/textPatientSecuredDesc" />
 
     <Button
         android:id="@+id/buttonArrival2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="@string/depltime_select"
         android:textSize="16sp"
+        android:layout_marginStart="4dp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintTop_toBottomOf="@+id/textArrival2Desc" />
 
     <Button
         android:id="@+id/buttonEnd"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="4dp"
         android:text="@string/depltime_select"
         android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineTwoThirds"
         app:layout_constraintTop_toBottomOf="@+id/textEndDesc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

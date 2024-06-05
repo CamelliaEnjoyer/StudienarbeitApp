@@ -112,7 +112,7 @@ class DeploymentTimeFragment : Fragment() {
         }
 
         buttonEndDeployment.setOnClickListener{
-            deploymentTimeViewModel.sendDeploymentInformation(requireContext(), onSuccess = {
+            deploymentTimeViewModel.sendDeploymentInformation(onSuccess = {
                 StorageHelper.clearStorage()
 
                 findNavController().navigate(R.id.action_nav_deploymentTime_to_nav_deploymentInformation)

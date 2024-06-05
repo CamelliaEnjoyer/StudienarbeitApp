@@ -1,6 +1,7 @@
 package com.example.studienarbeitapp.services
 
 import android.content.Context
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.R
@@ -13,14 +14,13 @@ import org.json.JSONObject
 class DeploymentTimeService(private val context: Context) {
 
     private val gson = Gson()
-    //private val baseUrl = context.getString(R.string.base_url)
-    private val baseUrl = "DEPLTIMESERVICE"
+    private val baseUrl = context.getString(R.string.base_url)
 
     // fetching deployment time (only alarm received)
     fun fetchDeploymentTime (onSuccess: (ResponseDeploymentTimeModel) -> Unit, onError: (ResponseDeploymentTimeModel) -> Unit) {
         val token = StorageHelper.getToken()
-        val deplId = StorageHelper.getDeploymentId()
-        val url = "$baseUrl/$deplId"
+        val deplTimeId = StorageHelper.getTimeModelId()
+        val url = baseUrl + "deploymentTimes/$deplTimeId"
 
         // Instantiate the RequestQueue with the provided Context
         val queue = Volley.newRequestQueue(context)
@@ -49,6 +49,13 @@ class DeploymentTimeService(private val context: Context) {
             }
         }
 
+        // Set the retry policy for the request
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // Initial timeout duration
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Maximum number of retries
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Backoff multiplier
+        )
+
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)
     }
@@ -58,7 +65,7 @@ class DeploymentTimeService(private val context: Context) {
                                   onError: (String) -> Unit) {
         val token = StorageHelper.getToken()
         val deplId = StorageHelper.getDeploymentId()
-        val url = "$baseUrl/$deplId"
+        val url = "$baseUrl/finishDeployment/$deplId"
 
         val queue = Volley.newRequestQueue(context)
 
@@ -87,6 +94,13 @@ class DeploymentTimeService(private val context: Context) {
                 return headers
             }
         }
+
+        // Set the retry policy for the request
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // Initial timeout duration
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Maximum number of retries
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Backoff multiplier
+        )
 
         queue.add(jsonObjectRequest)
     }

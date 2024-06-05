@@ -14,14 +14,20 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.R
 import com.example.studienarbeitapp.databinding.FragmentDeploynentinformationBinding
 import com.example.studienarbeitapp.helper.LocationHelper
 import com.example.studienarbeitapp.helper.StorageHelper
+import com.example.studienarbeitapp.models.response.ResponseDeploymentIdModel
+import com.example.studienarbeitapp.models.response.ResponseDeploymentInformationModel
+import com.example.studienarbeitapp.models.response.ResponseDeploymentOverallModel
 import com.example.studienarbeitapp.services.DeploymentInformationService
+import com.google.gson.Gson
 
 class DeploymentInformationFragment : Fragment() {
 
@@ -36,18 +42,14 @@ class DeploymentInformationFragment : Fragment() {
     private val REQUEST_LOCATION_PERMISSION = 1
 
     private val googleMapsPackage = R.string.deplinfo_googleMapsPackage
-    private lateinit var primaryLocation: String
+    private lateinit var primaryLatitude: String
+    private lateinit var primaryLongitude: String
 
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
     private var delay: Long = 30000 // 30 seconds in milliseconds
     private var waitingDialog: Dialog? = null
-    var i = 0
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        println("THIS IS THE FKING DEPL ID" + StorageHelper.getDeploymentId())
-    }
+    private val gson = Gson()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,8 +64,6 @@ class DeploymentInformationFragment : Fragment() {
 
         _binding = FragmentDeploynentinformationBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-
 
         handler = Handler()
         runnable = Runnable {
@@ -94,20 +94,21 @@ class DeploymentInformationFragment : Fragment() {
                 textViewKeyword.text = it.keyword
                 textViewCaller.text = it.caller
                 textViewLocation.text = it.normalizedAddress
-                primaryLocation = it.normalizedAddress
+                primaryLatitude = it.latitude
+                primaryLongitude = it.longitude
                 textViewAdditionalInfo.text = it.additionalInfo
             }
 
             imageViewLoc1.setOnClickListener {
-                if(this::primaryLocation.isInitialized){
-                    getGoogleDirections(primaryLocation)
+                if(this::primaryLatitude.isInitialized && this::primaryLongitude.isInitialized){
+                    getGoogleDirections(primaryLatitude, primaryLongitude)
                 } else {
                     getGoogleDirections()
                 }
             }
 
             imageViewLoc2.setOnClickListener {
-                getGoogleDirections("Hospital")
+                getGoogleDirections()
             }
         }
 
@@ -119,7 +120,7 @@ class DeploymentInformationFragment : Fragment() {
         _binding = null
     }
 
-    private fun getGoogleDirections(address: String) {
+    private fun getGoogleDirections(latitude: String, longitude: String) {
         val locationPermission = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
@@ -134,7 +135,7 @@ class DeploymentInformationFragment : Fragment() {
                 try {
                     val locationLatitude = location?.latitude
                     val locationLongitude = location?.longitude
-                    val uri = Uri.parse("https://www.google.com/maps/dir/$locationLatitude,$locationLongitude/$address")
+                    val uri = Uri.parse("https://www.google.com/maps/dir/$locationLatitude,$locationLongitude/$latitude,$longitude")
                     val intent = Intent(Intent.ACTION_VIEW, uri)
                     intent.setPackage("com.google.android.apps.maps")
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -181,31 +182,44 @@ class DeploymentInformationFragment : Fragment() {
     }
 
     private fun getDeployment() {
-        val url = "YOUR_API_ENDPOINT"
-        i++
+        val baseUrl = getString(R.string.base_url)
+        val url = baseUrl + "newDeployment/" + StorageHelper.getVehicleID()
+        val token = StorageHelper.getToken()
 
-        val stringRequest = StringRequest(
-            Request.Method.GET, url,
+        // Request a JSONObject response from the provided URL.
+        val jsonObjectRequest = object : JsonObjectRequest(
+            Method.GET, url, null,
             { response ->
+                val deploymentIdJson = gson.fromJson(response.toString(), ResponseDeploymentIdModel::class.java)
                 // Check if the response contains an ID
-                if (!response.toString().isNullOrEmpty()) {
-                    // Check if the response contains an ID
-                    if (response.toString().isNotEmpty()) {
-                        hideWaitingDialog()
-                        StorageHelper.saveDeploymentId(response.toString())
-                    }
+                if (!deploymentIdJson.deploymentId.isNullOrEmpty()) {
+                    StorageHelper.saveDeploymentId(deploymentIdJson.deploymentId)
+                    fetchDeploymentOverall()
+                    hideWaitingDialog()
+                    handler.removeCallbacks(runnable)
                 }
             },
-            { error ->
-                println("THIS IS IIIII$i")
-                if(i == 2){
-                    StorageHelper.saveDeploymentId("ISTHISWORKINGHMMM")
-                    hideWaitingDialog()
-                }
-            })
+            { _ ->
+            }) {
+
+            // Override getHeaders to include token in request headers
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                // Add token to Authorization header
+                headers["Authorization"] = "Bearer $token"
+                return headers
+            }
+        }
+
+        // Set the retry policy for the request
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // Initial timeout duration
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Maximum number of retries
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Backoff multiplier
+        )
 
         // Add the request to the RequestQueue.
-        Volley.newRequestQueue(requireContext()).add(stringRequest)
+        Volley.newRequestQueue(requireContext()).add(jsonObjectRequest)
     }
 
     override fun onStop() {
@@ -224,5 +238,53 @@ class DeploymentInformationFragment : Fragment() {
 
     private fun hideWaitingDialog() {
         waitingDialog?.dismiss()
+    }
+
+    private fun fetchDeploymentOverall(){
+        val baseUrl = getString(R.string.base_url)
+        val token = StorageHelper.getToken()
+        val deplId = StorageHelper.getDeploymentId()
+        val url = baseUrl + "deployments/$deplId"
+
+        // Instantiate the RequestQueue with the provided Context
+        val queue = Volley.newRequestQueue(context)
+
+        // Request a JSONObject response from the provided URL.
+        val jsonObjectRequest = object : JsonObjectRequest(
+            Method.GET, url, null,
+            { response ->
+                // Parse the JSON response and call onSuccess callback
+                println(response.toString())
+                val overallDeploymentIds = gson.fromJson(response.toString(), ResponseDeploymentOverallModel::class.java)
+                StorageHelper.saveDeploymentInfoId(overallDeploymentIds.deploymentinfoid)
+                StorageHelper.savePatientInfoId(overallDeploymentIds.patientid)
+                StorageHelper.saveTimeModelId(overallDeploymentIds.timemodelid)
+
+                println("THIS IS DEPLOYMENTINFOID" + StorageHelper.getDeploymentInfoId())
+                println("THIS IS PATIENTINFOID" + StorageHelper.getPatientInfoId())
+                println("THIS IS TIMEMODELINFOID" + StorageHelper.getTimeModelId())
+            },
+            { error ->
+                println("Overall deployment fetching not working" + error.message)
+            }) {
+
+            // Override getHeaders to include token in request headers
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                // Add token to Authorization header
+                headers["Authorization"] = "Bearer $token"
+                return headers
+            }
+        }
+
+        // Set the retry policy for the request
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // Initial timeout duration
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Maximum number of retries
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Backoff multiplier
+        )
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest)
     }
 }

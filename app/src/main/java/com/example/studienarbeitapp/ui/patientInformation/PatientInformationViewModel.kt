@@ -11,7 +11,7 @@ class PatientInformationViewModel(private val patientInformationService: Patient
 
     fun getPatientDataFromService() {
         //only load data if not yet loaded
-        if(patientInfo.value == null){
+        if(patientInfo.value == null) {
             patientInformationService.fetchPatientInformation(
                 onSuccess = { patientInformationResponse ->
                     // Update LiveData with the fetched user data
@@ -19,10 +19,8 @@ class PatientInformationViewModel(private val patientInformationService: Patient
                 },
                 onError = { patientInformationResponse2 ->
                     patientInfo.value = patientInformationResponse2
-                    // Handle error
                 }
             )
         }
     }
-
 }

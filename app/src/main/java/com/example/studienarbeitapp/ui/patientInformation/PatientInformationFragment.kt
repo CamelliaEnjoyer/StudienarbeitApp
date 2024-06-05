@@ -32,6 +32,8 @@ class PatientInformationFragment : Fragment() {
         _binding = FragmentPatientinformationBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        patientInformationViewModel.getPatientDataFromService()
+
         val textViewFirstName: TextView = binding.textPrimaryNameValue
         val textViewLastName: TextView = binding.textSecondNameValue
         val textViewStreet: TextView = binding.textStreetValue
@@ -48,8 +50,6 @@ class PatientInformationFragment : Fragment() {
             textViewBirthdate.text = it.birthdate
             textViewGender.text = it.gender
         }
-
-        patientInformationViewModel.getPatientDataFromService()
 
         return root
     }

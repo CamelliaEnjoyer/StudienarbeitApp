@@ -1,6 +1,7 @@
 package com.example.studienarbeitapp.services
 
 import android.content.Context
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.R
@@ -11,13 +12,12 @@ import com.google.gson.Gson
 class DeploymentInformationService(private val context: Context) {
 
     private val gson = Gson()
-    //private val baseUrl = context.getString(R.string.base_url)
-    private val baseUrl = "DEPLINFOOOOOOOOSERVICE"
+    private val baseUrl = context.getString(R.string.base_url)
 
     fun fetchDeploymentInformation(onSuccess: (ResponseDeploymentInformationModel) -> Unit, onError: () -> Unit) {
         val token = StorageHelper.getToken()
-        val deplId = StorageHelper.getDeploymentId()
-        val url = "$baseUrl/$deplId"
+        val deplInfoId = StorageHelper.getDeploymentInfoId()
+        val url = baseUrl + "deploymentInformation/$deplInfoId"
 
         // Instantiate the RequestQueue with the provided Context
         val queue = Volley.newRequestQueue(context)
@@ -44,6 +44,13 @@ class DeploymentInformationService(private val context: Context) {
                 return headers
             }
         }
+
+        // Set the retry policy for the request
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // Initial timeout duration
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Maximum number of retries
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Backoff multiplier
+        )
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)

@@ -1,10 +1,9 @@
 package com.example.studienarbeitapp.ui.deploymentTime
 
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.studienarbeitapp.helper.DateHelper
+import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.models.request.RequestDeploymentTimeModel
 import com.example.studienarbeitapp.models.response.ResponseDeploymentTimeModel
 import com.example.studienarbeitapp.services.DeploymentTimeService
@@ -14,7 +13,7 @@ class DeploymentTimeViewModel(private val deploymentTimeService: DeploymentTimeS
 
     val deploymentTimeResponse = MutableLiveData<ResponseDeploymentTimeModel>()
     val deploymentTimeRequest = MutableLiveData<RequestDeploymentTimeModel>().apply {
-        value = RequestDeploymentTimeModel("", "", "", "", "")
+        value = RequestDeploymentTimeModel("", "", "", "", "", "")
     }
 
     fun getDeploymentTimeFromService() {
@@ -32,16 +31,22 @@ class DeploymentTimeViewModel(private val deploymentTimeService: DeploymentTimeS
         }
     }
 
-    fun sendDeploymentInformation(context: Context, onSuccess: () -> Unit,
+    fun sendDeploymentInformation(onSuccess: () -> Unit,
                                   onError: (String) -> Unit){
-        val deploymentTimeModel = deploymentTimeRequest.value
+        val deploymentTimeModel = StorageHelper.getTimeModelId()?.let {
+            deploymentTimeRequest.value?.let { it1 ->
+                RequestDeploymentTimeModel(
+                    it, it1.start,
+                    deploymentTimeRequest.value!!.arrivalOnSite, deploymentTimeRequest.value!!.patientAdmitted, deploymentTimeRequest.value!!.arrivalOnSite2, deploymentTimeRequest.value!!.end)
+            }
+        }
         if (deploymentTimeModel != null) {
             deploymentTimeService.sendDeploymentInformation(deploymentTimeModel, onSuccess = {
                 onSuccess()
             },
-            onError = {
-                onError(it)
-            })
+                onError = {
+                    onError(it)
+                })
         }
     }
 
