@@ -1,10 +1,9 @@
 package com.example.studienarbeitapp.services
 
 import android.content.Context
-import com.android.volley.DefaultRetryPolicy
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.R
+import com.example.studienarbeitapp.helper.ServiceHelper
 import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.models.request.RequestDeploymentTimeModel
 import com.example.studienarbeitapp.models.response.ResponseDeploymentTimeModel
@@ -17,13 +16,22 @@ class DeploymentTimeService(private val context: Context) {
     private val baseUrl = context.getString(R.string.base_url)
 
     // fetching deployment time (only alarm received)
-    fun fetchDeploymentTime (onSuccess: (ResponseDeploymentTimeModel) -> Unit, onError: (ResponseDeploymentTimeModel) -> Unit) {
+    fun fetchDeploymentTime(
+        onSuccess: (ResponseDeploymentTimeModel) -> Unit,
+        onError: (ResponseDeploymentTimeModel) -> Unit
+    ) {
+        val isInformationLoaded = ServiceHelper.getDeploymentTimesLoaded()
+        if (isInformationLoaded == true) {
+            return
+        }
+        ServiceHelper.saveDeploymentTimesLoaded(true)
+
         val token = StorageHelper.getToken()
         val deplTimeId = StorageHelper.getTimeModelId()
         val url = baseUrl + "deploymentTimes/$deplTimeId"
 
         // Instantiate the RequestQueue with the provided Context
-        val queue = Volley.newRequestQueue(context)
+        //val queue = Volley.newRequestQueue(context)
 
         // Request a JSONObject response from the provided URL.
         val jsonObjectRequest = object : JsonObjectRequest(
@@ -31,7 +39,8 @@ class DeploymentTimeService(private val context: Context) {
             { response ->
                 // Parse the JSON response and call onSuccess callback
                 println(response.toString())
-                val deploymentTime = gson.fromJson(response.toString(), ResponseDeploymentTimeModel::class.java)
+                val deploymentTime =
+                    gson.fromJson(response.toString(), ResponseDeploymentTimeModel::class.java)
                 onSuccess(deploymentTime)
             },
             { error ->
@@ -49,25 +58,20 @@ class DeploymentTimeService(private val context: Context) {
             }
         }
 
-        // Set the retry policy for the request
-        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
-            DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // Initial timeout duration
-            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Maximum number of retries
-            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Backoff multiplier
-        )
-
         // Add the request to the RequestQueue.
-        queue.add(jsonObjectRequest)
+        //queue.add(jsonObjectRequest)
+        VolleySingleton.getInstance(context).requestQueue.add(jsonObjectRequest)
     }
 
     // Method to send DeploymentInformationModel using a PUT request
-    fun sendDeploymentInformation(deploymentTime: RequestDeploymentTimeModel, onSuccess: (String) -> Unit,
-                                  onError: (String) -> Unit) {
+    fun sendDeploymentTimes(
+        deploymentTime: RequestDeploymentTimeModel
+    ) {
         val token = StorageHelper.getToken()
         val deplId = StorageHelper.getDeploymentId()
-        val url = "$baseUrl/finishDeployment/$deplId"
+        val url = baseUrl + "finishDeployment/$deplId"
 
-        val queue = Volley.newRequestQueue(context)
+        //val queue = Volley.newRequestQueue(context)
 
         // Convert DeploymentInformationModel to JSON string
         val jsonObject = JSONObject(gson.toJson(deploymentTime))
@@ -78,12 +82,12 @@ class DeploymentTimeService(private val context: Context) {
             { response ->
                 // Handle successful response
                 println(response.toString())
-                onSuccess("success")
+                StorageHelper.clearDeploymentInformation()
+                ServiceHelper.clearServiceHelperStorage()
             },
             { error ->
                 // Handle error
                 println("Error sending deployment information: ${error.message}")
-                onError(error.message ?: "Unknown error occurred")
             }) {
 
             // Override getHeaders to include token in request headers
@@ -95,13 +99,9 @@ class DeploymentTimeService(private val context: Context) {
             }
         }
 
-        // Set the retry policy for the request
-        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
-            DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // Initial timeout duration
-            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Maximum number of retries
-            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Backoff multiplier
-        )
+        println("THIS IS MA JSON DERULO$jsonObject")
 
-        queue.add(jsonObjectRequest)
+        //queue.add(jsonObjectRequest)
+        VolleySingleton.getInstance(context).requestQueue.add(jsonObjectRequest)
     }
 }

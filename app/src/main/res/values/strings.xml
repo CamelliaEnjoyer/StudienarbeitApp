@@ -44,4 +44,6 @@
     <string name="logout">Sign out</string>
     <string name="deplinfo_googleMapsPackage">com.google.android.apps.maps</string>
     <string name="dialog_waitForDeployment">Waiting for deployment</string>
+    <string name="complete_deployment_proceed">How do you want to proceed?</string>
+    <string name="complete_deployment_newdepl">New deployment</string>
 </resources>

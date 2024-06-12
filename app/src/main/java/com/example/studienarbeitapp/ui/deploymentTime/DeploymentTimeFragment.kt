@@ -1,18 +1,24 @@
 package com.example.studienarbeitapp.ui.deploymentTime
 
+import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import com.example.studienarbeitapp.LoginActivity
 import com.example.studienarbeitapp.R
 import com.example.studienarbeitapp.databinding.FragmentDeploymenttimeBinding
 import com.example.studienarbeitapp.helper.DateHelper
+import com.example.studienarbeitapp.helper.ServiceHelper
 import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.services.DeploymentTimeService
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
@@ -20,12 +26,15 @@ import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePick
 import java.util.Date
 import java.util.TimeZone
 
+/**
+ * Fragment responsible for managing deployment time.
+ */
 class DeploymentTimeFragment : Fragment() {
 
     private var _binding: FragmentDeploymenttimeBinding? = null
+    private var completeDeploymentDialog: Dialog? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -63,27 +72,40 @@ class DeploymentTimeFragment : Fragment() {
 
         //Create onClickListeners for the buttons
         val onClickListener = { view: View ->
-            when(view.id) {
+            when (view.id) {
                 buttonStart.id -> {
                     openSingleDateAndTimePickerDialog(textViewStart, requireContext()) { time ->
                         deploymentTimeViewModel.setStartTime(time)
                     }
                 }
+
                 buttonArrivalOnSite.id -> {
-                    openSingleDateAndTimePickerDialog(textViewArrivalOnSite, requireContext()) { time ->
+                    openSingleDateAndTimePickerDialog(
+                        textViewArrivalOnSite,
+                        requireContext()
+                    ) { time ->
                         deploymentTimeViewModel.setArrivalOnSite(time)
                     }
                 }
+
                 buttonPatientAdmitted.id -> {
-                    openSingleDateAndTimePickerDialog(textViewPatientAdmitted, requireContext()) { time ->
+                    openSingleDateAndTimePickerDialog(
+                        textViewPatientAdmitted,
+                        requireContext()
+                    ) { time ->
                         deploymentTimeViewModel.setPatientAdmitted(time)
                     }
                 }
+
                 buttonArrivalOnSite2.id -> {
-                    openSingleDateAndTimePickerDialog(textViewArrivalOnSite2, requireContext()) { time ->
+                    openSingleDateAndTimePickerDialog(
+                        textViewArrivalOnSite2,
+                        requireContext()
+                    ) { time ->
                         deploymentTimeViewModel.setArrivalOnSite2(time)
                     }
                 }
+
                 buttonEnd.id -> {
                     openSingleDateAndTimePickerDialog(textViewEnd, requireContext()) { time ->
                         deploymentTimeViewModel.setEndTime(time)
@@ -111,18 +133,8 @@ class DeploymentTimeFragment : Fragment() {
             textViewEnd.text = it.end
         }
 
-        buttonEndDeployment.setOnClickListener{
-            deploymentTimeViewModel.sendDeploymentInformation(onSuccess = {
-                StorageHelper.clearStorage()
-
-                findNavController().navigate(R.id.action_nav_deploymentTime_to_nav_deploymentInformation)
-            }, onError = {
-                //ToDo: Delete 2 lines
-                StorageHelper.clearStorage()
-                findNavController().navigate(R.id.action_nav_deploymentTime_to_nav_deploymentInformation)
-
-                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-            })
+        buttonEndDeployment.setOnClickListener {
+            showCompleteDeploymentDialog(deploymentTimeViewModel)
         }
 
         deploymentTimeViewModel.getDeploymentTimeFromService()
@@ -135,7 +147,11 @@ class DeploymentTimeFragment : Fragment() {
         _binding = null
     }
 
-    private fun openSingleDateAndTimePickerDialog(view: TextView, context: Context, timeSetter: (Date) -> Unit){
+    private fun openSingleDateAndTimePickerDialog(
+        view: TextView,
+        context: Context,
+        timeSetter: (Date) -> Unit
+    ) {
         val currentDateTime = Date()
         val timezone = TimeZone.getDefault()
         SingleDateAndTimePickerDialog.Builder(context)
@@ -149,6 +165,7 @@ class DeploymentTimeFragment : Fragment() {
                 override fun onDisplayed(picker: SingleDateAndTimePicker) {
                     // Retrieve the SingleDateAndTimePicker
                 }
+
                 fun onClosed(picker: SingleDateAndTimePicker) {
                     // On dialog closed
                 }
@@ -158,5 +175,73 @@ class DeploymentTimeFragment : Fragment() {
                 timeSetter(it)
                 view.text = DateHelper.formatDate(it)
             }.display()
+    }
+
+    private fun showCompleteDeploymentDialog(deploymentTimeViewModel: DeploymentTimeViewModel) {
+        completeDeploymentDialog = Dialog(requireContext())
+        completeDeploymentDialog?.apply {
+            setContentView(R.layout.dialog_complete_deployment)
+            setCancelable(true)
+            show()
+
+            // Find the buttons in the dialog layout
+            val logoutButton = findViewById<Button>(R.id.signout)
+            val newDeploymentButton = findViewById<Button>(R.id.newdepl)
+
+            // Set click listeners for the buttons
+            logoutButton.setOnClickListener {
+                deploymentTimeViewModel.sendDeploymentInformation()
+                sendLogout()
+
+                navigateToLoginActivity()
+                dismiss()
+            }
+
+            newDeploymentButton.setOnClickListener {
+                deploymentTimeViewModel.sendDeploymentInformation()
+                findNavController().navigate(R.id.action_nav_deploymentTime_to_nav_deploymentInformation)
+                dismiss()
+            }
+        }
+    }
+
+    private fun navigateToLoginActivity() {
+        val intent = Intent(context, LoginActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun sendLogout() {
+        val baseUrl = context?.getString(R.string.base_url)
+        val url = baseUrl + "logout"
+        val token = StorageHelper.getToken()
+
+        println(token)
+
+        // Instantiate the RequestQueue with the provided Context
+        val queue = Volley.newRequestQueue(context)
+
+        // Create a JsonObjectRequest with POST method
+        val request = object : JsonObjectRequest(
+            Method.DELETE, url, null,
+            { success ->
+                StorageHelper.clearDeploymentInformation()
+                ServiceHelper.clearServiceHelperStorage()
+            },
+            { error ->
+                println()
+                println(error.message)
+            }) {
+
+            // Override getHeaders to include token in request headers
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                // Add token to Authorization header
+                headers["Authorization"] = "Bearer $token"
+                return headers
+            }
+        }
+
+        // Add the request to the RequestQueue
+        queue.add(request)
     }
 }

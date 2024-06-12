@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.studienarbeitapp.MainActivity
@@ -14,15 +15,26 @@ import com.example.studienarbeitapp.databinding.FragmentLoginBinding
 import com.example.studienarbeitapp.helper.StorageHelper
 import com.example.studienarbeitapp.services.LoginService
 
-
+/**
+ * Fragment class for handling the login UI and interactions.
+ */
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    /**
+     * This property is only valid between onCreateView and onDestroyView.
+     */
     private val binding get() = _binding!!
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,50 +70,57 @@ class LoginFragment : Fragment() {
         val loginButton = binding.buttonLogin
         val editTextUser = binding.editTextTextId
         val editTextPin = binding.editTextTextPin
+        // Set the OnClickListener only if it's not already set
+        loginButton.setOnClickListener {
+            var selectedVehicle = ""
+            if (dropDown.size != 0) {
+                selectedVehicle = dropDown.selectedItem.toString()
+            }
+            val username = editTextUser.text.toString()
+            val password = editTextPin.text.toString()
 
-        // Define a flag to check if the listener is already set
-        var isLoginButtonClickListenerSet = false
-
-        // Inside your fragment's onViewCreated or onCreateView method
-        if (!isLoginButtonClickListenerSet) {
-            // Set the OnClickListener only if it's not already set
-            loginButton.setOnClickListener {
-                val username = editTextUser.text.toString()
-                val password = editTextPin.text.toString()
-                val selectedVehicle = dropDown.selectedItem.toString()
-
-                if(username.isEmpty() || password.isEmpty() || selectedVehicle.isEmpty()){
-                    Toast.makeText(requireContext(), "Please enter username and pin", Toast.LENGTH_SHORT).show()
-                } else {
-                    val selectedVehicleId = nameIdMap[selectedVehicle]
-                    if (selectedVehicleId != null) {
-                        loginService.sendLoginInformation(username, password, selectedVehicleId,
-                            onSuccess = {
-                                if(it.isNotEmpty()){
-                                    StorageHelper.saveVehicle(selectedVehicleId)
-                                    StorageHelper.saveToken(it)
-                                    navigateToMainActivity()
-                                }
-                            },
-                            onError = {
-                                Toast.makeText(requireContext(), "Login request failed, server unavailable", Toast.LENGTH_SHORT).show()
-                            })
-                    }
+            if (username.isEmpty() || password.isEmpty() || selectedVehicle.isEmpty()) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please enter username and pin",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val selectedVehicleId = nameIdMap[selectedVehicle]
+                if (selectedVehicleId != null) {
+                    loginService.sendLoginInformation(username, password, selectedVehicleId,
+                        onSuccess = {
+                            if (it.isNotEmpty()) {
+                                StorageHelper.saveVehicle(selectedVehicleId)
+                                StorageHelper.saveToken(it)
+                                navigateToMainActivity()
+                            }
+                        },
+                        onError = {
+                            Toast.makeText(
+                                requireContext(),
+                                "Login request failed, server unavailable",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        })
                 }
             }
-            // Update the flag to indicate that the listener is set
-            isLoginButtonClickListenerSet = true
         }
 
         return root
     }
 
-
+    /**
+     * Navigates to the MainActivity.
+     */
     private fun navigateToMainActivity() {
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent)
     }
 
+    /**
+     * Called when the view created by onCreateView has been detached from the fragment.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

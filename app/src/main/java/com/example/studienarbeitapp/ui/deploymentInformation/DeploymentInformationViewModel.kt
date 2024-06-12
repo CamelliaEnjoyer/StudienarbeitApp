@@ -2,26 +2,34 @@ package com.example.studienarbeitapp.ui.deploymentInformation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.studienarbeitapp.models.request.RequestDeploymentInformationModel
 import com.example.studienarbeitapp.models.response.ResponseDeploymentInformationModel
 import com.example.studienarbeitapp.services.DeploymentInformationService
 
-class DeploymentInformationViewModel(private val deployInformationService: DeploymentInformationService) : ViewModel() {
+/**
+ * ViewModel responsible for managing deployment information.
+ *
+ * @param deployInformationService The service used for fetching deployment information.
+ */
+class DeploymentInformationViewModel(private val deployInformationService: DeploymentInformationService) :
+    ViewModel() {
 
+    /**
+     * LiveData for deployment information response.
+     */
     val deploymentInfoResponse = MutableLiveData<ResponseDeploymentInformationModel>()
-    val deploymentInfoRequest = MutableLiveData<RequestDeploymentInformationModel>()
 
+    /**
+     * Retrieves deployment information from the service.
+     */
     fun getDeploymentInfoFromService() {
-        if(deploymentInfoResponse.value == null){
-            deployInformationService.fetchDeploymentInformation(
-                onSuccess = { deploymentInfoResponse ->
-                    // Update LiveData with the fetched user data
-                    this.deploymentInfoResponse.value = deploymentInfoResponse
-                },
-                onError = {
-                    // Handle error
-                }
-            )
-        }
+        deployInformationService.fetchDeploymentInformation(
+            onSuccess = { deploymentInfoResponse ->
+                // Update LiveData with the fetched deployment information
+                this.deploymentInfoResponse.value = deploymentInfoResponse
+            },
+            onError = {
+                // Handle error
+            }
+        )
     }
 }

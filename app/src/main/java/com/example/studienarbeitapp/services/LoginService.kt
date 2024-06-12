@@ -7,6 +7,7 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.studienarbeitapp.R
+import com.example.studienarbeitapp.helper.ServiceHelper
 import com.example.studienarbeitapp.models.request.RequestLoginInformationModel
 import com.example.studienarbeitapp.models.response.ResponseLoginTokenModel
 import com.example.studienarbeitapp.models.response.ResponseLoginVehicleModel
@@ -22,6 +23,11 @@ class LoginService(private val context: Context) {
     val listType = object : TypeToken<ArrayList<ResponseLoginVehicleModel>>() {}.type
 
     fun getAvailableVehicles(onSuccess: (ArrayList<ResponseLoginVehicleModel>) -> Unit, onError: (ArrayList<ResponseLoginVehicleModel>) -> Unit) {
+        val isInformationLoaded = ServiceHelper.getVehicleLoaded()
+        if(isInformationLoaded == true){
+            return
+        }
+        ServiceHelper.saveVehicleLoaded(true)
 
         val url = baseUrl + "ambulance-cars"
 
@@ -42,7 +48,7 @@ class LoginService(private val context: Context) {
         // Set the retry policy for the request
         request.retryPolicy = DefaultRetryPolicy(
             DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // Initial timeout duration
-            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Maximum number of retries
+            0, // Maximum number of retries
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Backoff multiplier
         )
 
@@ -50,8 +56,10 @@ class LoginService(private val context: Context) {
         queue.add(request)
     }
 
-    fun sendLoginInformation(user: String, pin: String, selectedVehicle: String,
-                             onSuccess: (String) -> Unit, onError: (String) -> Unit){
+    fun sendLoginInformation(
+        user: String, pin: String, selectedVehicle: String,
+        onSuccess: (String) -> Unit, onError: (String) -> Unit
+    ) {
         val url = baseUrl + "login"
         println(url)
 
@@ -65,22 +73,16 @@ class LoginService(private val context: Context) {
         println(requestBody.toString())
 
         // Create a JsonObjectRequest with POST method
-        val request = JsonObjectRequest(Request.Method.POST, url, JSONObject(requestBody) ,
+        val request = JsonObjectRequest(Request.Method.POST, url, JSONObject(requestBody),
             { response ->
-                val tokenJson = gson.fromJson(response.toString(), ResponseLoginTokenModel::class.java)
+                val tokenJson =
+                    gson.fromJson(response.toString(), ResponseLoginTokenModel::class.java)
                 println(tokenJson.token)
                 onSuccess(tokenJson.token)
             },
             { error ->
-                onError(error.toString())
+                onError(error.message.toString())
             })
-
-        // Set the retry policy for the request
-        request.retryPolicy = DefaultRetryPolicy(
-            DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // Initial timeout duration
-            DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Maximum number of retries
-            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Backoff multiplier
-        )
 
         // Add the request to the RequestQueue
         queue.add(request)

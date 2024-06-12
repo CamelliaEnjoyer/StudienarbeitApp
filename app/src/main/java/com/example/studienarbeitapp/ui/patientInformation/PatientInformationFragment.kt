@@ -10,14 +10,24 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.studienarbeitapp.databinding.FragmentPatientinformationBinding
 import com.example.studienarbeitapp.services.PatientInformationService
 
+/**
+ * Fragment responsible for displaying patient information.
+ */
 class PatientInformationFragment : Fragment() {
 
     private var _binding: FragmentPatientinformationBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
+    /**
+     * Creates the view for displaying patient information.
+     *
+     * @param inflater The layout inflater object that can be used to inflate any views in the fragment.
+     * @param container The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState The previously saved state of the fragment.
+     * @return The root view of the fragment.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,6 +64,9 @@ class PatientInformationFragment : Fragment() {
         return root
     }
 
+    /**
+     * Cleans up resources associated with the fragment.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -59,7 +59,12 @@ object StorageHelper {
         return storageMap[KEY_TIMEMODEL_ID]
     }
 
-    fun clearStorage() {
+    fun clearDeploymentInformation() {
+        storageMap[KEY_TOKEN] = ""
+        storageMap[KEY_VEHICLE_ID] = ""
+    }
+
+    fun clearStorageHelperStorage() {
         storageMap[KEY_DEPLOYMENT_ID] = ""
         storageMap[KEY_TOKEN] = ""
         storageMap[KEY_DEPLOYMENTINFO_ID] = ""
