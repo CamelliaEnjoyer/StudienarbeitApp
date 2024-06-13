@@ -2,7 +2,6 @@ package com.example.studienarbeitapp.helper
 
 object ServiceHelper {
 
-    private const val KEY_DEPLOYMENT_ID_LOADED = "deploymentIdLoaded"
     private const val KEY_VEHICLE_ID_LOADED = "vehicleLoaded"
     private const val KEY_DEPLOYMENTOVERALL_LOADED = "deploymentOverallLoaded"
     private const val KEY_PATIENTINFORMATION_LOADED = "deploymentPatientInformationLoaded"
@@ -10,10 +9,6 @@ object ServiceHelper {
     private const val KEY_DEPLOYMENTTIMES_LOADED = "deploymentTimesLoaded"
 
     private var storageMap = mutableMapOf<String, Boolean>()
-
-    fun saveDeploymentIdLoaded(bool: Boolean) {
-        storageMap[KEY_DEPLOYMENT_ID_LOADED] = bool
-    }
 
     fun saveVehicleLoaded(bool: Boolean) {
         storageMap[KEY_VEHICLE_ID_LOADED] = bool
@@ -39,10 +34,6 @@ object ServiceHelper {
         return storageMap[KEY_VEHICLE_ID_LOADED]
     }
 
-    fun getDeploymentIdLoaded(): Boolean? {
-        return storageMap[KEY_DEPLOYMENT_ID_LOADED]
-    }
-
     fun getDeploymentOverallLoaded(): Boolean? {
         return storageMap[KEY_DEPLOYMENTOVERALL_LOADED]
     }
@@ -60,7 +51,6 @@ object ServiceHelper {
     }
 
     fun clearServiceHelperStorage() {
-        storageMap[KEY_DEPLOYMENT_ID_LOADED] = false
         storageMap[KEY_VEHICLE_ID_LOADED] = false
         storageMap[KEY_DEPLOYMENTOVERALL_LOADED] = false
         storageMap[KEY_PATIENTINFORMATION_LOADED] = false
